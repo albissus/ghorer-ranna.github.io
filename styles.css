@@ -109,9 +109,9 @@ h1, h2, h3 {
   position: absolute;
   top: 50%;
   left: 100%;
-  margin-left: 1.5rem;
+  margin-left: clamp(0.5rem, 2vw, 1.5rem);
   transform: translateY(-50%);
-  height: 180%;
+  height: clamp(50px, calc(50vw - 324px), 380px);
   width: auto;
   pointer-events: none;
 }
@@ -120,14 +120,15 @@ h1, h2, h3 {
   position: absolute;
   top: 50%;
   right: 100%;
-  margin-right: 1.5rem;
+  margin-right: clamp(0.5rem, 2vw, 1.5rem);
   transform: translateY(-50%);
-  height: 180%;
+  height: clamp(50px, calc(50vw - 324px), 380px);
   width: auto;
   pointer-events: none;
 }
 
 .hero-title-wrap {
+  --title-size: clamp(32px, 11vw, 104px);
   position: relative;
   display: inline-block;
   margin-bottom: 1.5rem;
@@ -135,10 +136,10 @@ h1, h2, h3 {
 
 .hero-hat {
   position: absolute;
-  top: -69px;
+  top: calc(var(--title-size) * -0.66);
   left: 50%;
   transform: translateX(-282%) rotate(-8deg);
-  width: 130px;
+  width: calc(var(--title-size) * 1.25);
   height: auto;
   z-index: 1;
 }
@@ -146,7 +147,7 @@ h1, h2, h3 {
 .hero-title {
   position: relative;
   font-family: var(--font-accent);
-  font-size: clamp(32px, 11vw, 104px);
+  font-size: var(--title-size);
   line-height: 1.05;
   background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
   white-space: nowrap;
@@ -500,11 +501,6 @@ h1, h2, h3 {
 
   .story-bowls {
     height: 200px;
-  }
-
-  .hero-potspans,
-  .hero-spatula {
-    display: none;
   }
 
   .plan-grid,
