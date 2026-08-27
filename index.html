@@ -106,8 +106,10 @@
     </div>
 
     
-    <div class="story-photo">
-      <img src="img/biriyani.jpg" alt="Biriyani image">
+    <div class="photo-stack">
+      <img src="img/biriyani.jpg" alt="Biriyani cooking in a pan, garnished with fried potato and whole spices" class="stack-img">
+      <img src="img/biriyani-plate.jpg" alt="A plated serving of beef tehari with potato, egg, and green chili" class="stack-img">
+      <img src="img/ghee.jpg" alt="A jar of Gawa Ghee" class="stack-img">
     </div>
 
     <!--- COMMENT OUT THE ROUND THINGS
@@ -300,6 +302,37 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script>
+  (function () {
+    var stack = document.querySelector('.photo-stack');
+    if (!stack) return;
+
+    var imgs = Array.prototype.slice.call(stack.querySelectorAll('.stack-img'));
+    var count = imgs.length;
+    if (count < 2) return;
+
+    var current = 0;
+    var posClasses = ['pos-0', 'pos-1', 'pos-2', 'pos-hidden'];
+
+    function render() {
+      imgs.forEach(function (img, i) {
+        var rel = (i - current + count) % count;
+        img.classList.remove.apply(img.classList, posClasses);
+        img.classList.add(posClasses[Math.min(rel, posClasses.length - 1)]);
+      });
+    }
+
+    render();
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(function () {
+        current = (current + 1) % count;
+        render();
+      }, 1500);
+    }
+  })();
 </script>
 
 </body>
