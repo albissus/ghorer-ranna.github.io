@@ -106,10 +106,13 @@
     </div>
 
     
-    <div class="photo-stack">
-      <img src="img/biriyani.jpg" alt="Biriyani cooking in a pan, garnished with fried potato and whole spices" class="stack-img">
-      <img src="img/biriyani-plate.jpg" alt="A plated serving of beef tehari with potato, egg, and green chili" class="stack-img">
-      <img src="img/ghee.jpg" alt="A jar of Gawa Ghee" class="stack-img">
+    <div class="carousel-wrap">
+      <div class="carousel">
+        <img src="img/biriyani.jpg" alt="Biriyani cooking in a pan, garnished with fried potato and whole spices" class="carousel-card">
+        <img src="img/biriyani-plate.jpg" alt="A plated serving of beef tehari with potato, egg, and green chili" class="carousel-card">
+        <img src="img/ghee.jpg" alt="A jar of Gawa Ghee" class="carousel-card">
+      </div>
+      <div class="carousel-dots" aria-hidden="true"></div>
     </div>
 
     <!--- COMMENT OUT THE ROUND THINGS
@@ -306,31 +309,68 @@
 
 <script>
   (function () {
-    var stack = document.querySelector('.photo-stack');
-    if (!stack) return;
+    var wrap = document.querySelector('.carousel-wrap');
+    if (!wrap) return;
 
-    var imgs = Array.prototype.slice.call(stack.querySelectorAll('.stack-img'));
-    var count = imgs.length;
+    var cards = Array.prototype.slice.call(wrap.querySelectorAll('.carousel-card'));
+    var count = cards.length;
     if (count < 2) return;
 
+    // current = the card on the face of the deck. Each card's class is its
+    // position relative to current (0 = face, 1 / 2 = peeking behind,
+    // anything deeper = hidden at the back). Advancing current moves the
+    // face card to the back of the pile and promotes the rest forward,
+    // cycling the deck round and round.
     var current = 0;
-    var posClasses = ['pos-0', 'pos-1', 'pos-2', 'pos-hidden'];
+    var posClasses = ['pos-0', 'pos-1', 'pos-2', 'pos-back'];
+
+    var dotsContainer = wrap.querySelector('.carousel-dots');
+    var dots = [];
+    if (dotsContainer) {
+      cards.forEach(function () {
+        var dot = document.createElement('span');
+        dot.className = 'carousel-dot';
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+      });
+    }
 
     function render() {
-      imgs.forEach(function (img, i) {
+      cards.forEach(function (card, i) {
         var rel = (i - current + count) % count;
-        img.classList.remove.apply(img.classList, posClasses);
-        img.classList.add(posClasses[Math.min(rel, posClasses.length - 1)]);
+        var cls = posClasses[Math.min(rel, posClasses.length - 1)];
+        card.classList.remove.apply(card.classList, posClasses);
+        card.classList.remove('pos-fade');
+        card.classList.add(cls);
+      });
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('active', i === current);
       });
     }
 
     render();
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setInterval(function () {
-        current = (current + 1) % count;
-        render();
-      }, 1500);
+      var timer;
+      var swapping = false;
+      // Fade the face card out over 0.3s, then reassign positions: it
+      // fades back in at the back of the pile, so the swap reads as a
+      // crossfade rather than a card visibly sliding behind the stack.
+      var advance = function () {
+        if (swapping) return;
+        swapping = true;
+        cards[current].classList.add('pos-fade');
+        window.setTimeout(function () {
+          current = (current + 1) % count;
+          render();
+          swapping = false;
+        }, 300);
+      };
+      var start = function () { timer = window.setInterval(advance, 2000); };
+      var stop = function () { window.clearInterval(timer); };
+      start();
+      wrap.addEventListener('mouseenter', stop);
+      wrap.addEventListener('mouseleave', start);
     }
   })();
 </script>

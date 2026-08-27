@@ -244,10 +244,6 @@ h1, h2, h3 {
 /* Our Story */
 
 .story {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 4rem;
-  align-items: center;
   padding: 3rem 6vw 5rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -284,50 +280,91 @@ h1, h2, h3 {
 .story-bowls .b5 { width: 55px; height: 55px; bottom: 30px; left: 40%; background: linear-gradient(135deg, var(--grad-2), var(--accent)); }
 .story-bowls .b6 { width: 65px; height: 65px; top: 60px; left: 55%; background: var(--grad-2); opacity: 0.7; }
 
-.photo-stack {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  padding: 1.5rem;
+.carousel-wrap {
+  max-width: 720px;
+  margin: 5rem auto 0;
 }
 
-.stack-img {
+.carousel {
+  position: relative;
+  height: clamp(560px, 92vw, 700px);
+}
+
+/* Cards are stacked on top of one another: pos-0 is the face of the deck,
+   pos-1 / pos-2 peek out behind it, fanned and offset. Each tick the front
+   card recedes to the back of the pile (pos-0 -> pos-2) while the rest
+   promote forward, so the deck cycles round and round. */
+
+.carousel-card {
   position: absolute;
-  inset: 1.5rem;
-  width: calc(100% - 3rem);
-  height: calc(100% - 3rem);
+  top: 50%;
+  left: 50%;
+  height: 82%;
+  width: auto;
+  aspect-ratio: 9 / 16;
   object-fit: cover;
   display: block;
-  border-radius: 16px;
-  box-shadow: 0 14px 30px rgba(56, 19, 19, 0.28);
-  transition: transform 0.7s ease, opacity 0.7s ease;
+  border-radius: 18px;
+  box-shadow: 0 22px 48px rgba(56, 19, 19, 0.30);
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  will-change: transform, opacity;
 }
 
-.stack-img.pos-0 {
-  transform: rotate(0deg) scale(1) translate(0, 0);
-  z-index: 3;
+.carousel-card.pos-0 {
+  transform: translate(-50%, -50%) rotate(-2deg) scale(1);
+  z-index: 30;
   opacity: 1;
 }
 
-.stack-img.pos-1 {
-  transform: rotate(-6deg) scale(0.93) translate(14px, 16px);
-  z-index: 2;
-  opacity: 0.9;
+.carousel-card.pos-1 {
+  transform: translate(-50%, -55%) rotate(4deg) scale(0.93);
+  z-index: 20;
+  opacity: 1;
 }
 
-.stack-img.pos-2 {
-  transform: rotate(6deg) scale(0.88) translate(-14px, 26px);
-  z-index: 1;
-  opacity: 0.75;
+.carousel-card.pos-2 {
+  transform: translate(-50%, -60%) rotate(-5deg) scale(0.86);
+  z-index: 10;
+  opacity: 1;
 }
 
-.stack-img.pos-hidden {
-  transform: scale(0.8) translate(0, 40px);
-  z-index: 0;
+.carousel-card.pos-back {
+  transform: translate(-50%, -60%) rotate(0deg) scale(0.8);
+  z-index: 5;
   opacity: 0;
 }
 
+/* Transient state during a swap: the outgoing face card fades out in
+   place (keeping its pos-0 transform) on top of the stack, then its
+   position is reassigned and it fades back in at the back of the pile.
+   Declared last so it wins the opacity/z-index over pos-0. */
+.carousel-card.pos-fade {
+  opacity: 0;
+  z-index: 40;
+}
+
+.carousel-dots {
+  margin-top: 0.85rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: var(--grad-1);
+  transform: scale(1.25);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .stack-img {
+  .carousel-card {
     transition: none;
   }
 }
