@@ -1,0 +1,13 @@
+{
+  "name": "Ghorer Ranna",
+  "short_name": "Ghorer Ranna",
+  "description": "Home-style Bangladeshi catering in Metro Vancouver.",
+  "icons": [
+    { "src": "img/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "img/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#550000",
+  "background_color": "#f4f0eb",
+  "display": "standalone",
+  "start_url": "/"
+}
