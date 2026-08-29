@@ -158,9 +158,42 @@ h1, h2, h3 {
 }
 
 .hero-tagline {
-  font-size: 20px;
-  max-width: 520px;
-  margin: 0 auto 2.25rem;
+  max-width: 640px;
+  margin: -1rem auto 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 2vw, 1.25rem);
+}
+
+.hero-tagline-clock,
+.hero-tagline-plate {
+  width: auto;
+  flex: none;
+  /* clock.png / plate.png ship with a white box; multiply drops it
+     into the flat cream background. */
+  mix-blend-mode: multiply;
+}
+
+.hero-tagline-clock {
+  height: clamp(88px, 16vw, 120px);
+}
+
+.hero-tagline-plate {
+  height: clamp(70px, 13vw, 98px);
+}
+
+.hero-tagline-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(20px, 3.4vw, 28px);
+  line-height: 1.3;
+  color: var(--text-deep);
+  /* Keep each sentence on its own single line on wider screens; the
+     max-width: 780px block below lets it wrap on small screens. */
+  white-space: nowrap;
 }
 
 .btn-primary,
@@ -364,8 +397,15 @@ h1, h2, h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .carousel-card {
+  .carousel-card,
+  .plan-card,
+  .addon-card {
     transition: none;
+  }
+
+  .plan-card:hover,
+  .addon-card:hover {
+    transform: none;
   }
 }
 
@@ -414,6 +454,12 @@ h1, h2, h3 {
   border: 1px solid var(--accent);
   border-radius: 16px;
   padding: 2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(56, 19, 19, 0.14);
 }
 
 .plan-card h3 {
@@ -468,6 +514,12 @@ h1, h2, h3 {
   margin: 0 auto 2.5rem;
   padding: 2rem 2.5rem;
   text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.addon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(56, 19, 19, 0.14);
 }
 
 .addon-card h3 {
@@ -597,6 +649,16 @@ h1, h2, h3 {
 @media (max-width: 780px) {
   .site-nav {
     gap: 1rem;
+  }
+
+  .hero-tagline {
+    flex-direction: column;
+    max-width: 340px;
+    gap: 0.1rem;
+  }
+
+  .hero-tagline-text {
+    white-space: normal;
   }
 
   .story {
