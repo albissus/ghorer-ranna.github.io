@@ -164,7 +164,7 @@ h1, h2, h3 {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.4rem, 2vw, 1.25rem);
+  gap: clamp(0.1rem, 0.6vw, 0.35rem);
 }
 
 .hero-tagline-clock,
@@ -181,7 +181,7 @@ h1, h2, h3 {
 }
 
 .hero-tagline-plate {
-  height: clamp(70px, 13vw, 98px);
+  height: clamp(84px, 15.4vw, 116px);
 }
 
 .hero-tagline-text {
